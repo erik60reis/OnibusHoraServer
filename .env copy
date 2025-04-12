@@ -1,0 +1,5 @@
+# Configurações do servidor
+PORT=3000
+
+# Chave da API HERE (mantenha isso seguro e nunca o inclua no controle de versão!)
+HERE_API_KEY=
