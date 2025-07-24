@@ -17,6 +17,8 @@ app.use(express.json());
 const API_KEY = process.env.HERE_API_KEY;
 const API_BASE_URL = "https://transit.hereapi.com/v8";
 
+app.use(express.static('public'));
+
 // Carregar ônibus adicionais do arquivo extraBusDb.json
 let extraBusData = [];
 try {
@@ -141,3 +143,12 @@ app.get('/', (req, res) => {
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
+
+setInterval(() => {
+  if (departuresCache.size > 0) {
+    fs.writeFileSync('1.txt', JSON.stringify(departuresCache.values().next().value));
+  }
+  if (stationCache.size > 0) {
+    fs.writeFileSync('2.txt', JSON.stringify(stationCache.values().next().value));
+  }
+}, 1000);
