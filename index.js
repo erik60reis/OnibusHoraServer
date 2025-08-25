@@ -32,7 +32,7 @@ try {
 // CACHE
 const stationCache = new Map();     // Chave: área aproximada (lat/lon arredondados)
 const departuresCache = new Map();  // Chave: stationId
-const CACHE_DURATION = 2 * 60 * 1000; // 2 minutos em ms
+const CACHE_DURATION = 4 * 60 * 1000; // 4 minutos em ms
 
 // Utilitário para arredondar coordenadas e criar uma chave de cache
 function getCacheKeyFromLocation(lat, lon, radius) {
@@ -45,7 +45,9 @@ function getCacheKeyFromLocation(lat, lon, radius) {
 // Endpoint para buscar estações com cache baseado em localização arredondada
 app.get('/api/stations', async (req, res) => {
   try {
-    const { latitude, longitude, radius = 1000 } = req.query;
+    const { latitude, longitude } = req.query;
+
+    let radius = 1500;
 
     if (!latitude || !longitude) {
       return res.status(400).json({ error: 'Os parâmetros latitude e longitude são obrigatórios' });
