@@ -142,6 +142,36 @@ app.get('/', (req, res) => {
   res.send("OK");
 });
 
+app.get('/reverse-geocode', async (req, res) => {
+  const { lat, lon } = req.query;
+
+  if (!lat || !lon) {
+    return res.status(400).json({ error: 'Latitude and longitude are required' });
+  }
+
+  try {
+    const response = await axios.get('https://nominatim.openstreetmap.org/reverse', {
+      params: {
+        format: 'json',
+        lat,
+        lon,
+        addressdetails: 1
+      },
+      headers: {
+        'User-Agent': 'NodeJS-App'
+      }
+    });
+
+    const address = response.data.address;
+    const city = address.city || address.town || address.village || 'Unknown';
+
+    res.json({ city });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ error: 'Failed to fetch city' });
+  }
+});
+
 app.listen(PORT, () => {
   console.log(`Servidor rodando na porta ${PORT}`);
 });
